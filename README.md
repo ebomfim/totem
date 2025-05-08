@@ -1,36 +1,136 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🖥️ Guia de Instalação do Totem em Raspberry Pi
 
-## Getting Started
+Este guia explica como configurar e rodar o sistema de totem localmente usando um Raspberry Pi.
 
-First, run the development server:
+---
+
+## ✅ PRÉ-REQUISITOS
+
+- Raspberry Pi com:
+  - Raspberry Pi OS atualizado
+  - Acesso à internet
+  - Teclado e mouse (ou acesso via SSH)
+- Chromium instalado
+- Node.js 18 ou superior
+- SQLite
+- Projeto React/Next.js clonado ou copiado
+
+---
+
+## 🔧 1. Atualize o sistema
+
+```bash
+sudo apt update && sudo apt upgrade -y
+```
+
+---
+
+## 🔧 2. Instale o Node.js e NPM
+
+```bash
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+sudo apt install -y nodejs
+node -v
+npm -v
+```
+
+---
+
+## 🔧 3. Instale dependências do sistema
+
+```bash
+sudo apt install git sqlite3 chromium-browser -y
+```
+
+---
+
+## 📁 4. Clone ou copie o projeto
+
+Se estiver no GitHub:
+
+```bash
+git clone https://github.com/seu-usuario/seu-projeto.git
+cd seu-projeto
+```
+
+Ou copie manualmente via pen drive para uma pasta como:
+
+```bash
+cd ~/meu-totem
+```
+
+---
+
+## 📦 5. Instale as dependências do projeto
+
+```bash
+npm install
+```
+
+---
+
+## 🗃️ 6. Configure o banco de dados (Prisma + SQLite)
+
+```bash
+npx prisma generate
+npx prisma migrate dev --name init
+```
+
+---
+
+## 🚀 7. Inicie o servidor Next.js
+
+Modo desenvolvimento:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Modo produção (recomendado):
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build
+npm start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Acesse via navegador local em:
 
-## Learn More
+```
+http://localhost:3000
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🖼️ 8. Configurar modo Kiosk (Tela cheia automática)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Edite o arquivo:
 
-## Deploy on Vercel
+```bash
+nano ~/.config/lxsession/LXDE-pi/autostart
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+E adicione ao final:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+@chromium-browser --kiosk http://localhost:3000
+```
+
+---
+
+## ⚙️ (Opcional) Executar como serviço com PM2
+
+```bash
+sudo npm install -g pm2
+pm2 start npm --name totem -- start
+pm2 save
+pm2 startup
+```
+
+---
+
+## ✅ Pronto!
+
+- O navegador abrirá em tela cheia com seu sistema
+- Tudo funciona offline, com banco SQLite local
+- Admin acessível com botão ⚙️ e senha
+- A busca é resetada automaticamente após 10 segundos
