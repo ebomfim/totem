@@ -4,11 +4,8 @@ import { NextResponse } from 'next/server'
 const prisma = new PrismaClient()
 
 // DELETE: Remove a professional by ID
-export async function DELETE(
-  req: Request,
-  context: { params: { id: string } }
-) {
-  const id = parseInt(context.params.id)
+export async function DELETE(req: Request, { params }: any) {
+  const id = parseInt(params.id)
 
   if (isNaN(id)) {
     return NextResponse.json({ error: 'ID inválido' }, { status: 400 })
@@ -26,12 +23,11 @@ export async function DELETE(
   }
 }
 
+
 // PUT: Updates a professional's data by ID
-export async function PUT(
-  req: Request,
-  context: { params: { id: string } }
-) {
-  const id = parseInt(context.params.id)
+export async function PUT(req: Request, { params }: any) {
+
+  const id = parseInt(params.id)
 
   if (isNaN(id)) {
     return NextResponse.json({ error: 'ID inválido' }, { status: 400 })
